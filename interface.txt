@@ -1,0 +1,12 @@
+****************************************
+             FORRA MUSIC
+****************************************
+
+QUAL A OPERACAO DESEJADA? 
+[1] Registrar novo artista
+[2] Registrar novo album
+[3] Registrar nova musica
+[4] Adicionar todas as musicas de um album
+[5] Limpa terminal
+[6] Sair do programa
+****************************************

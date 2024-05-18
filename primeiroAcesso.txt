@@ -1,0 +1,6 @@
+****************************************
+            PRIMEIRO ACESSO
+****************************************
+
+Para usar o Forra Music voce precisa de um client_id e um client_secret 
+do spotify.
