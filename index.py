@@ -1,4 +1,4 @@
-from func.registrar import registrarArtista, registrarAlbum, registrarMusica, registraTodasMusicas
+from func.registrar import registrarArtista, registrarAlbum, registrarMusica, registraTodasMusicasAlbum, registraMusicasPlaylist
 from func.pegaToken import gerarToken, registraCredenciais
 from func.criaDatabase import createDatabase
 from func.pegaID import pegaID
@@ -37,8 +37,7 @@ while True:
                 case '1':#registrar novo artista
                         artistaURL = input('Qual a URL do perfil desse artista: ')
                         artista_spotifyID = pegaID(artistaURL)
-                        registrarArtista(artista_spotifyID)
-                        
+                        registrarArtista(artista_spotifyID)                        
                 case '2':#registrar novo album
                         albumURL = input('Qual a URL do album: ')
                         album_spotifyID = pegaID(albumURL)
@@ -50,10 +49,14 @@ while True:
                 case '4':#registrar todas musicas de um album
                         albumURL = input('Qual a URL do album: ')
                         album_spotifyID = pegaID(albumURL)
-                        registraTodasMusicas(album_spotifyID)
-                case '5':
-                        os.system('cls')
+                        registraTodasMusicasAlbum(album_spotifyID)
+                case '5':#registra todas as musicas de uma playlist
+                        playlistURL = input('Qual a URL da playlist: ')
+                        playlist_spotifyID = pegaID(playlistURL)
+                        registraMusicasPlaylist(playlist_spotifyID)
                 case '6':
+                        os.system('cls')
+                case '7':
                         break
                 case _:
                         print('COMANDO INVALIDO')

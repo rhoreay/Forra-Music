@@ -75,7 +75,7 @@ def registrarMusica(musica_spotifyID):
 
     connection.commit()
 
-def registraTodasMusicas(album_spotifyID):
+def registraTodasMusicasAlbum(album_spotifyID):
     #request para pegar as musicas do album
     url = f'https://api.spotify.com/v1/albums/{album_spotifyID}'
     header = {"Authorization": f"Bearer {pegaToken()}"}
@@ -84,4 +84,14 @@ def registraTodasMusicas(album_spotifyID):
 
     for musica in musicas:
         musica_spotifyID = musica['id']
+        registrarMusica(musica_spotifyID)
+
+def registraMusicasPlaylist(playlist_spotify_id):
+    #request para pegar as musicas da playlist
+    url = f'https://api.spotify.com/v1/playlists/{playlist_spotify_id}?fields=tracks.items%28track%28id%2C+name%29%29'
+    header = {"Authorization": f"Bearer {pegaToken()}"}
+    response = requests.get(url, headers=header)
+    musicas = response.json()['tracks']['items']
+    for musica in musicas:
+        musica_spotifyID = musica['track']['id']
         registrarMusica(musica_spotifyID)

@@ -7,6 +7,7 @@ QUAL A OPERACAO DESEJADA?
 [2] Registrar novo album
 [3] Registrar nova musica
 [4] Adicionar todas as musicas de um album
-[5] Limpa terminal
-[6] Sair do programa
+[5] Adiciona as musicas de uma playlist
+[6] Limpa terminal
+[7] Sair do programa
 ****************************************
