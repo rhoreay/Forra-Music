@@ -1,4 +1,5 @@
 from func.registrar import registrarArtista, registrarAlbum, registrarMusica, registraTodasMusicasAlbum, registraMusicasPlaylist
+from func.fetchs import fetchArtista, fetchAlbum
 from func.pegaToken import gerarToken, registraCredenciais
 from func.criaDatabase import createDatabase
 from func.pegaID import pegaID
@@ -35,13 +36,14 @@ while True:
         comando = input('>')
         match comando:
                 case '1':#registrar novo artista
-                        artistaURL = input('Qual a URL do perfil desse artista: ')
-                        artista_spotifyID = pegaID(artistaURL)
-                        registrarArtista(artista_spotifyID)                        
+                        artista_spotifyID = pegaID(input('Qual a URL do perfil desse artista: '))
+                        nomeArtista = fetchArtista(artista_spotifyID)['name']
+                        registrarArtista(nomeArtista, artista_spotifyID)                       
                 case '2':#registrar novo album
-                        albumURL = input('Qual a URL do album: ')
-                        album_spotifyID = pegaID(albumURL)
-                        registrarAlbum(album_spotifyID)
+                        album_spotifyID = pegaID(input('Qual a URL do album: '))
+                        albumInfo = fetchAlbum(album_spotifyID)
+                        tituloAlbum, artistas = albumInfo['name'], albumInfo['artists']
+                        registrarAlbum(tituloAlbum, artistas, album_spotifyID)
                 case '3':#registrar musica
                         musicaURL = input('Qual a URL da musica: ')
                         musica_spotifyID = pegaID(musicaURL)

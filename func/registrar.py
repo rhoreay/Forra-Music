@@ -6,39 +6,27 @@ connection = sqlite3.connect('database.db')
 cursor = connection.cursor()
 
 #registra novo artista
-def registrarArtista(artista_spotifyID):
-    #request para pegar o nome do artista
-    url = f'https://api.spotify.com/v1/artists/{artista_spotifyID}'
-    header = {"Authorization": f"Bearer {pegaToken()}"}
-    response = requests.get(url, headers=header)
-    nomeArtista = response.json()['name']
-
+def registrarArtista(nomeArtista, artista_spotifyID):
     #verifica se o artista ja esta cadastrado
     if cursor.execute("SELECT * FROM ARTISTAS WHERE artista_spotify_id = ?", (artista_spotifyID,)).fetchone() == None:
         cursor.execute("INSERT INTO Artistas (nome, artista_spotify_id) VALUES (?, ?)", (nomeArtista, artista_spotifyID))
         connection.commit()
 
 #registra novo album
-def registrarAlbum(album_spotifyID):
-    #request para pegar o nome do album e os artistas dele
-    url = f'https://api.spotify.com/v1/albums/{album_spotifyID}'
-    header = {"Authorization": f"Bearer {pegaToken()}"}
-    response = requests.get(url, headers=header)
-    tituloAlbum = response.json()['name']
-    artistas = response.json()['artists']
-
+def registrarAlbum(tituloAlbum, artistas, album_spotifyID):
     #verifica se o album ja esta cadastrado e o cadastra se nao estiver
     if cursor.execute("SELECT * FROM ALBUMS WHERE album_spotify_id = ?", (album_spotifyID,)).fetchone() == None:
         cursor.execute("INSERT INTO Albums (titulo, album_spotify_id) VALUES (?, ?)", (tituloAlbum, album_spotifyID))
         connection.commit()
 
-    #pega o albumID do album criado
+    #pega o albumID do album 
     albumId = cursor.execute("SELECT album_id FROM Albums WHERE album_spotify_id = ?", (album_spotifyID,)).fetchone()[0]
 
     #registra os artistas do album e relaciona na tabela artistas_albums
     for artista in artistas:
         artista_spotifyID = artista['id']
-        registrarArtista(artista_spotifyID)
+        nomeArtista =  artista['name']
+        registrarArtista(nomeArtista, artista_spotifyID)
         artistaId = cursor.execute("SELECT artista_id FROM Artistas WHERE artista_spotify_id = ?", (artista_spotifyID,)).fetchone()[0]
         #verifica se ja existe a relacao na tabela artistas_albums
         if cursor.execute("SELECT * FROM artistas_albums WHERE artista_id = ? AND album_id = ?", (artistaId, albumId)).fetchone() == None:
