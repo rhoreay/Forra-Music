@@ -1,5 +1,5 @@
-from func.registrar import registrarArtista, registrarAlbum, registrarMusica, registraTodasMusicasAlbum, registraMusicasPlaylist
-from func.fetchs import fetchArtista, fetchAlbum
+from func.registrar import registrarArtista, registrarAlbum, registrarMusica
+from func.fetchs import fetchArtista, fetchAlbum, fetchMusica, fetchPlaylist
 from func.pegaToken import gerarToken, registraCredenciais
 from func.criaDatabase import createDatabase
 from func.pegaID import pegaID
@@ -37,27 +37,38 @@ while True:
         match comando:
                 case '1':#registrar novo artista
                         artista_spotifyID = pegaID(input('Qual a URL do perfil desse artista: '))
-                        nomeArtista = fetchArtista(artista_spotifyID)['name']
-                        registrarArtista(nomeArtista, artista_spotifyID)                       
+                        artistaInfo = fetchArtista(artista_spotifyID)  
+                        registrarArtista(artistaInfo)  
+
                 case '2':#registrar novo album
                         album_spotifyID = pegaID(input('Qual a URL do album: '))
                         albumInfo = fetchAlbum(album_spotifyID)
-                        tituloAlbum, artistas = albumInfo['name'], albumInfo['artists']
-                        registrarAlbum(tituloAlbum, artistas, album_spotifyID)
+                        registrarAlbum(albumInfo)
+
                 case '3':#registrar musica
-                        musicaURL = input('Qual a URL da musica: ')
-                        musica_spotifyID = pegaID(musicaURL)
-                        registrarMusica(musica_spotifyID)
+                        musica_spotifyID = pegaID(input('Qual a URL dessa musica: '))
+                        musicaInfo = fetchMusica(musica_spotifyID)  
+                        registrarMusica(musicaInfo) 
+
                 case '4':#registrar todas musicas de um album
-                        albumURL = input('Qual a URL do album: ')
-                        album_spotifyID = pegaID(albumURL)
-                        registraTodasMusicasAlbum(album_spotifyID)
+                        album_spotifyID = pegaID(input('Qual a URL do album: '))
+                        musicasAlbum = fetchAlbum(album_spotifyID)['tracks']['items']
+                        for musica in musicasAlbum:
+                                musica_spotifyID = musica['id']
+                                musicaInfo = fetchMusica(musica_spotifyID)  
+                                registrarMusica(musicaInfo)
+
                 case '5':#registra todas as musicas de uma playlist
-                        playlistURL = input('Qual a URL da playlist: ')
-                        playlist_spotifyID = pegaID(playlistURL)
-                        registraMusicasPlaylist(playlist_spotifyID)
+                        playlist_spotifyID = pegaID(input('Qual a URL da playlist: '))
+                        musicasPlaylist = fetchPlaylist(playlist_spotifyID)['tracks']['items']
+                        for musica in musicasPlaylist:
+                                musica_spotifyID = musica['track']['id']
+                                musicaInfo = fetchMusica(musica_spotifyID)  
+                                registrarMusica(musicaInfo)
+
                 case '6':
                         os.system('cls')
+
                 case '7':
                         break
                 case _:
